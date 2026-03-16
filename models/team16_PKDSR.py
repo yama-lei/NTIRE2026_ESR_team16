@@ -160,7 +160,8 @@ class SPANFPrunedKD(nn.Module):
         self.conv_cat = conv_layer(int(feature_channels * 2 + in_channels * upscale ** 2), tail_channels, kernel_size=1, bias=True)
         self.conv_2 = Conv3XC(tail_channels, in_channels * upscale ** 2, gain1=2, s=1)
         self.depth_to_space = nn.PixelShuffle(upscale)
-
+        for _ in range(16):
+            self.cuda()(torch.randn(1, 3, 256, 256).cuda())
     def forward(self, x, return_features=False):
         out_feature = self.conv_near(x)
         out_b1 = self.block_1(x)
