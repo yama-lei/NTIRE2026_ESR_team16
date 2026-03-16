@@ -36,6 +36,14 @@ def select_model(args, device):
         # model_path = os.path.join('model_zoo', 'team01_[your_model_name].pth')
         # model = [your_model_name]()
         # model.load_state_dict(torch.load(model_path), strict=True)
+    elif model_id==16:
+        from models.team16_PKDSR import SPANFPrunedKD 
+        # from models.spanf_prune import SPANFPrunedKD
+        name, data_range = f"{model_id:02}_PKDSR_FINAL_CKPT", 1.0
+        model = SPANFPrunedKD(3, 3, upscale=4, tail_channels=24, feature_channels=32).eval().to(device)
+        model_path = os.path.join('model_zoo', f'team16_PKDSR.pth')
+        stat_dict = torch.load(model_path,map_location=torch.device("cpu"))['params_ema']
+        model.load_state_dict(stat_dict, strict=True)
     else:
         raise NotImplementedError(f"Model {model_id} is not implemented.")
 
